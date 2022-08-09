@@ -1,0 +1,7 @@
+name: MC-Challenges
+version: '${version}'
+main: de.jahshaka.mcchallenges.McChallenges
+api-version: 1.19
+authors: [ Jahshaka ]
+description: Challenges for Minecraft
+website: https://jahshaka.de
