@@ -5,3 +5,10 @@ api-version: 1.19
 authors: [ Jahshaka ]
 description: Challenges for Minecraft
 website: https://jahshaka.de
+libraries:
+  - 'net.kyori:adventure-platform-bukkit:4.1.1'
+
+commands:
+  timer:
+    description: Everything that has to do with the timer
+    usage: 'Usage: /timer [resume|pause|reset]'

@@ -1,0 +1,4 @@
+constant:
+  messages:
+    prefix: '&7[Challenges] : '
+    noperms: '&cYou dont have enough permissions to do that!'

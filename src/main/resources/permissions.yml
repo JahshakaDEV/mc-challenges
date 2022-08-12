@@ -1,0 +1,6 @@
+permissions:
+  commands:
+    timer: challenges.commands.timer
+    timer.pause: challenges.commands.timer.pause
+    timer.reset: challenges.commands.timer.reset
+    timer.start: challenges.commands.timer.start
