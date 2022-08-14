@@ -28,11 +28,11 @@ public class Timer {
 	/**
 	 * The Timer task id to stop the scheduler.
 	 */
-	protected int timerTaskID;
+	protected int timerTaskID = -1;
 	/**
 	 * The Auto save task id to stop the scheduler.
 	 */
-	protected int autoSaveTaskID;
+	protected int autoSaveTaskID = -1;
 
 	McChallenges mcChallenges = JavaPlugin.getPlugin(McChallenges.class);
 	Logger logger = Logger.getLogger("Timer-Logger");
@@ -121,13 +121,15 @@ public class Timer {
 	 * Starts the timer.
 	 */
 	public void startTimer() {
-		BukkitTask timerTask = Bukkit.getScheduler().runTaskTimerAsynchronously(mcChallenges, () -> {
-			setTimePassed(getTimePassed() + 1);
-			sendTimer();
-		}, 20L, 20L);
-		setTimerTaskID(timerTask.getTaskId());
-		logger.info("Started Timer main-scheduler with taskID: " + timerTask.getTaskId());
-		startAutoSaving();
+		if (getTimerTaskID() == -1) {
+			BukkitTask timerTask = Bukkit.getScheduler().runTaskTimerAsynchronously(mcChallenges, () -> {
+				setTimePassed(getTimePassed() + 1);
+				sendTimer();
+			}, 20L, 20L);
+			setTimerTaskID(timerTask.getTaskId());
+			logger.info("Started Timer main-scheduler with taskID: " + timerTask.getTaskId());
+			startAutoSaving();
+		}
 	}
 
 
@@ -153,6 +155,8 @@ public class Timer {
 	public void stopTimer() {
 		Bukkit.getServer().getScheduler().cancelTask(getTimerTaskID());
 		Bukkit.getServer().getScheduler().cancelTask(getAutoSaveTaskID());
+		setTimerTaskID(-1);
+		setAutoSaveTaskID(-1);
 		saveTimer();
 	}
 
@@ -169,22 +173,72 @@ public class Timer {
 		long passedTime = getTimePassed();
 		while (passedTime >= 60) {
 			minutes++;
-			passedTime = passedTime - 60;
+			passedTime = (passedTime - 60);
 		}
 		while (minutes >= 60) {
 			hours++;
-			minutes = minutes - 60;
+			minutes = (minutes - 60);
 		}
 		while (hours >= 24) {
 			days++;
-			hours = hours - 24;
+			hours = (hours - 24);
 		}
-		String message;
+		String message = "&6&l";
 		if (days > 0) {
-			message = "&l&6" + days + " days " + hours + ":" + minutes + ":" + passedTime;
+			message = message + days + "d ";
+			if (hours != 0) {
+				if (hours > 9) {
+					message = message + hours + ":";
+				} else {
+					message = message + "0" + hours + ":";
+				}
+			} else {
+				message = message + "00:";
+			}
+			if (minutes != 0) {
+				if (minutes > 9) {
+					message = message + minutes + ":";
+				} else {
+					message = message + "0" + minutes + ":";
+				}
+			} else {
+				message = message + "00:";
+			}
+			if (passedTime > 9) {
+				message = message + passedTime;
+			} else {
+				message = message + "0" + passedTime;
+			}
 		} else {
-			message = "&l&6" + hours + ":" + minutes + ":" + passedTime;
+			if (hours != 0) {
+				if (hours > 9) {
+					message = message + hours + ":";
+				} else {
+					message = message + "0" + hours + ":";
+				}
+			}
+			if (minutes != 0) {
+				if (minutes > 9) {
+					message = message + minutes + ":";
+				} else {
+					message = message + "0" + minutes + ":";
+				}
+				if (passedTime > 9) {
+					message = message + passedTime;
+				} else {
+					message = message + "0" + passedTime;
+				}
+			} else {
+				message = message + "00:";
+				if (passedTime > 9) {
+					message = message + passedTime;
+				} else {
+					message = message + "0" + passedTime;
+				}
+			}
 		}
+
+
 		mcChallenges.audiences().players().sendActionBar(Component.text(ChatColor.translateAlternateColorCodes('&', message)));
 	}
 }

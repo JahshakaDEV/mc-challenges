@@ -21,6 +21,7 @@ public final class McChallenges extends JavaPlugin {
 
 
 	public ConfigManager configManager;
+	public TimerManager timerManager;
 	CommandsHelper commandsHelper;
 	Logger mainLogger = Logger.getLogger("Challenges");
 
@@ -49,6 +50,7 @@ public final class McChallenges extends JavaPlugin {
 		configManager = new ConfigManager();
 		commandsHelper = new CommandsHelper();
 		registerCommands();
+		timerManager = new TimerManager();
 		this.audience = BukkitAudiences.create(this);
 	}
 
@@ -59,7 +61,6 @@ public final class McChallenges extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		// Plugin shutdown logic
-		TimerManager timerManager = new TimerManager();
 		timerManager.pauseTimer();
 		if (this.audience != null) {
 			this.audience.close();

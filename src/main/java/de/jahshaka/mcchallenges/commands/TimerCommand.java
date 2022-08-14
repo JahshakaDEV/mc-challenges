@@ -27,16 +27,13 @@ public class TimerCommand implements CommandExecutor {
 	McChallenges mcChallenges = JavaPlugin.getPlugin(McChallenges.class);
 	CommandsHelper cH = new CommandsHelper();
 	Logger logger = Logger.getLogger("Timer-CMD");
-	TimerManager timerManager = null;
 
 	@Override
 	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 		if (sender instanceof Player player) {
 			if (command.getName().equalsIgnoreCase(command.getName())) {
 				if (player.hasPermission(cH.getPermissions("timer"))) {
-					if (timerManager == null) {
-						timerManager = new TimerManager();
-					}
+					TimerManager timerManager = mcChallenges.timerManager;
 					if (args.length > 2 || args.length == 0) {
 						cH.sendMessage(player, "&c" + command.getUsage());
 						return true;
@@ -83,7 +80,7 @@ public class TimerCommand implements CommandExecutor {
 				}
 			}
 		} else {
-			logger.info("Timer command can only be executed by players.");
+			logger.info("This command can only be executed by players.");
 			return true;
 		}
 		return false;
